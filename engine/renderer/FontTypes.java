@@ -17,22 +17,22 @@ public class FontTypes {
     private static Font[] font_types;
 
     public static void loadFontTypes() {
-        try {
-            byte[] data = readResource("resources/inits.ao", "fonts");
-            reader.init(data, ByteOrder.BIG_ENDIAN);
+        byte[] data = readResource("resources/inits.ao", "fonts");
+        if (data == null) {
+            System.err.println("Could not load fonts data!");
+            return;
+        }
 
-            int cantFontTypes = (int) reader.readInt();
-            font_types = new Font[cantFontTypes];
+        reader.init(data, ByteOrder.BIG_ENDIAN);
 
-            for (int i = 0; i < cantFontTypes; i++) {
-                font_types[i] = new Font();
-                font_types[i].fontSize = reader.readInt();
-                for (int k = 0; k < 256; k++)
-                    font_types[i].ascii_code[k] = reader.readInt();
-            }
+        int cantFontTypes = (int) reader.readInt();
+        font_types = new Font[cantFontTypes];
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (int i = 0; i < cantFontTypes; i++) {
+            font_types[i] = new Font();
+            font_types[i].fontSize = reader.readInt();
+            for (int k = 0; k < 256; k++)
+                font_types[i].ascii_code[k] = reader.readInt();
         }
     }
 
